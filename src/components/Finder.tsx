@@ -59,6 +59,13 @@ export default function Finder() {
   const [csvError, setCsvError] = useState<string | null>(null);
   const [csvWarnings, setCsvWarnings] = useState<string[]>([]);
   const [csvListings, setCsvListings] = useState<Listing[] | null>(null);
+  const [liveUrlsText, setLiveUrlsText] = useState("");
+  const [liveLoading, setLiveLoading] = useState(false);
+  const [liveError, setLiveError] = useState<string | null>(null);
+  const [liveResults, setLiveResults] = useState<
+    { url: string; ok: boolean; error?: string }[]
+  >([]);
+  const [liveListings, setLiveListings] = useState<Listing[] | null>(null);
 
   const [query, setQuery] = useState("");
   const [budgetHuf, setBudgetHuf] = useState("4500000");
@@ -73,8 +80,11 @@ export default function Finder() {
   const [bodies, setBodies] = useState<Set<BodyType>>(new Set());
 
   const listings = useMemo<Listing[]>(
-    () => (source === "sample" ? sampleListings : csvListings ?? []),
-    [source, csvListings]
+    () => {
+      if (source === "sample") return sampleListings;
+      return csvListings ?? liveListings ?? [];
+    },
+    [source, csvListings, liveListings]
   );
 
   const criteria: SearchCriteria = useMemo(
@@ -118,6 +128,46 @@ export default function Finder() {
     setCsvListings(res.listings);
     setCsvWarnings(res.warnings);
     setSource("csv");
+  }
+
+  async function onFetchLive() {
+    setLiveError(null);
+    setLiveResults([]);
+    setLiveLoading(true);
+    try {
+      const urls = liveUrlsText
+        .split(/\r?\n/g)
+        .map((l) => l.trim())
+        .filter(Boolean);
+
+      const res = await fetch("/api/ingest", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ urls }),
+      });
+      const json: unknown = await res.json();
+      const obj = (json && typeof json === "object" ? (json as Record<string, unknown>) : null) ?? null;
+      if (!res.ok) {
+        const err = obj && typeof obj.error === "string" ? obj.error : "Live ingest failed.";
+        setLiveError(err);
+        setLiveListings(null);
+        return;
+      }
+
+      const listings = Array.isArray(obj?.listings) ? (obj?.listings as Listing[]) : [];
+      const results = Array.isArray(obj?.results)
+        ? (obj?.results as { url: string; ok: boolean; error?: string }[])
+        : [];
+
+      setLiveListings(listings);
+      setLiveResults(results);
+      setSource("csv");
+    } catch (e) {
+      setLiveError(e instanceof Error ? e.message : "Live ingest failed.");
+      setLiveListings(null);
+    } finally {
+      setLiveLoading(false);
+    }
   }
 
   function onReset() {
@@ -315,7 +365,7 @@ export default function Finder() {
             <div>
               <div className="text-lg font-semibold">Data source</div>
               <div className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-                Use sample listings now; import CSV later.
+                Use sample listings now; import CSV or fetch live from listing URLs.
               </div>
             </div>
             <Select
@@ -332,6 +382,62 @@ export default function Finder() {
           </div>
 
           <div className="mt-4 grid gap-2">
+            <FieldLabel>Live (URLs)</FieldLabel>
+            <Hint>
+              Paste listing URLs (one per line) from Használtautó / Jófogás / dealer sites. The server fetches each page and extracts best-effort JSON‑LD/meta data.
+            </Hint>
+            <textarea
+              className={[
+                "min-h-[110px] w-full rounded-xl border border-black/10 bg-white p-3 text-xs text-zinc-900 outline-none",
+                "focus:ring-2 focus:ring-zinc-900/10",
+                "dark:border-white/10 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:ring-white/10",
+              ].join(" ")}
+              placeholder={`https://www.hasznaltauto.hu/\nhttps://www.dasweltauto.hu`}
+              value={liveUrlsText}
+              onChange={(e) => setLiveUrlsText(e.target.value)}
+            />
+            <div className="flex flex-wrap items-center gap-2">
+              <Button onClick={onFetchLive} disabled={liveLoading || !liveUrlsText.trim().length}>
+                {liveLoading ? "Fetching..." : "Fetch live"}
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setLiveUrlsText("");
+                  setLiveError(null);
+                  setLiveResults([]);
+                  setLiveListings(null);
+                }}
+                disabled={liveLoading || (!liveUrlsText.trim().length && !liveListings)}
+              >
+                Clear live
+              </Button>
+              <div className="text-xs text-zinc-500 dark:text-zinc-400">
+                Live rows: <span className="font-medium">{liveListings?.length ?? 0}</span>
+              </div>
+            </div>
+            {liveError ? (
+              <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-300">
+                {liveError}
+              </div>
+            ) : null}
+            {liveResults.length ? (
+              <div className="rounded-xl border border-black/10 bg-white p-3 text-xs text-zinc-600 dark:border-white/10 dark:bg-black dark:text-zinc-400">
+                <div className="font-medium text-zinc-900 dark:text-zinc-100">Live fetch results</div>
+                <ul className="mt-1 list-disc pl-5">
+                  {liveResults.slice(0, 6).map((r) => (
+                    <li key={r.url}>
+                      {r.ok ? "OK" : `Failed: ${r.error ?? "error"}`} –{" "}
+                      <a className="underline underline-offset-4" href={r.url} target="_blank" rel="noreferrer">
+                        {r.url}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+                {liveResults.length > 6 ? <div className="mt-1">…and {liveResults.length - 6} more</div> : null}
+              </div>
+            ) : null}
+
             <FieldLabel>CSV import</FieldLabel>
             <Hint>
               Required columns: <code className="font-mono">id,title,priceHuf,year,mileageKm,fuel,transmission,body</code>
