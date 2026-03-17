@@ -272,6 +272,44 @@ export default function Finder() {
         </Card>
 
         <Card>
+          <div className="text-lg font-semibold">Sources (manual for now)</div>
+          <div className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+            Use these sites to collect listings, then paste a CSV export into the importer.
+          </div>
+          <ul className="mt-4 grid gap-2 text-sm">
+            {[
+              { label: "Használtautó", href: "https://www.hasznaltauto.hu/" },
+              { label: "Duna Autó", href: "https://dunaauto.hu" },
+              {
+                label: "Peugeot Fábián (used)",
+                href: "https://www.peugeotfabian.hu/budapest/hasznaltauto/?caru-smPage=1",
+              },
+              {
+                label: "Emil Frey Select",
+                href: "https://emilfreyselect.hu/kiemelt-hasznaltauto-kinalatunk",
+              },
+              {
+                label: "Toyota Kovács (used)",
+                href: "https://toyotakovacs.hu/auto-allapot/hasznaltauto/?gad_source=1&gad_campaignid=1697753888&gbraid=0AAAAAD5jtTF5DyO5Lr-qZWihSQt7PVGFF&gclid=Cj0KCQjw9-PNBhDfARIsABHN6-26kobdn-SXxbwvz3LHCVBo1oO0LaSnCJDKttHFeos-bauxQ38NAnsaAiaREALw_wcB",
+              },
+              { label: "Das WeltAuto", href: "https://www.dasweltauto.hu" },
+            ].map((s) => (
+              <li key={s.href}>
+                <a
+                  className="font-medium underline underline-offset-4 opacity-85 hover:opacity-100"
+                  href={s.href}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {s.label}
+                </a>
+                <div className="text-xs text-zinc-500 dark:text-zinc-400">{s.href}</div>
+              </li>
+            ))}
+          </ul>
+        </Card>
+
+        <Card>
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="text-lg font-semibold">Data source</div>
