@@ -408,58 +408,100 @@ export default function Finder() {
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex min-w-0 gap-4">
-                      <div className="relative mt-0.5 hidden h-[76px] w-[124px] shrink-0 overflow-hidden rounded-xl border border-black/10 bg-zinc-100 dark:border-white/10 dark:bg-white/5 sm:block">
-                        {l.imageUrl ? (
-                          <Image
-                            src={l.imageUrl}
-                            alt={l.title}
-                            fill
-                            sizes="124px"
-                            className="object-cover"
-                          />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center text-xs text-zinc-500 dark:text-zinc-400">
-                            No image
-                          </div>
-                        )}
-                      </div>
+                      {l.url ? (
+                        <a
+                          href={l.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="relative mt-0.5 hidden h-[76px] w-[124px] shrink-0 overflow-hidden rounded-xl border border-black/10 bg-zinc-100 dark:border-white/10 dark:bg-white/5 sm:block"
+                          aria-label={`Open listing: ${l.title}`}
+                        >
+                          {l.imageUrl ? (
+                            <Image
+                              src={l.imageUrl}
+                              alt={l.title}
+                              fill
+                              sizes="124px"
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center text-xs text-zinc-500 dark:text-zinc-400">
+                              No image
+                            </div>
+                          )}
+                        </a>
+                      ) : (
+                        <div className="relative mt-0.5 hidden h-[76px] w-[124px] shrink-0 overflow-hidden rounded-xl border border-black/10 bg-zinc-100 dark:border-white/10 dark:bg-white/5 sm:block">
+                          {l.imageUrl ? (
+                            <Image
+                              src={l.imageUrl}
+                              alt={l.title}
+                              fill
+                              sizes="124px"
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center text-xs text-zinc-500 dark:text-zinc-400">
+                              No image
+                            </div>
+                          )}
+                        </div>
+                      )}
 
                       <div className="min-w-0">
-                        <div className="truncate text-base font-semibold">{l.title}</div>
-                      <div className="mt-1 flex flex-wrap gap-2 text-xs text-zinc-600 dark:text-zinc-400">
-                        <span>{formatHuf(l.priceHuf)}</span>
-                        <span>•</span>
-                        <span>{l.year}</span>
-                        <span>•</span>
-                        <span>{new Intl.NumberFormat("hu-HU").format(l.mileageKm)} km</span>
-                        {l.location ? (
-                          <>
-                            <span>•</span>
-                            <span>{l.location}</span>
-                          </>
-                        ) : null}
-                      </div>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        <Badge>{l.fuel}</Badge>
-                        <Badge>{l.transmission}</Badge>
-                        <Badge>{l.body}</Badge>
-                      </div>
+                        {l.url ? (
+                          <a
+                            href={l.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="block truncate text-base font-semibold underline-offset-4 hover:underline"
+                          >
+                            {l.title}
+                          </a>
+                        ) : (
+                          <div className="truncate text-base font-semibold">{l.title}</div>
+                        )}
+                        <div className="mt-1 flex flex-wrap gap-2 text-xs text-zinc-600 dark:text-zinc-400">
+                          <span>{formatHuf(l.priceHuf)}</span>
+                          <span>•</span>
+                          <span>{l.year}</span>
+                          <span>•</span>
+                          <span>{new Intl.NumberFormat("hu-HU").format(l.mileageKm)} km</span>
+                          {l.location ? (
+                            <>
+                              <span>•</span>
+                              <span>{l.location}</span>
+                            </>
+                          ) : null}
+                        </div>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          <Badge>{l.fuel}</Badge>
+                          <Badge>{l.transmission}</Badge>
+                          <Badge>{l.body}</Badge>
+                        </div>
                       </div>
                     </div>
 
                     <div className="flex shrink-0 flex-col items-end gap-2">
-                      <div className="text-2xl font-semibold tabular-nums">{l.score}</div>
-                      <div className="text-xs text-zinc-500 dark:text-zinc-400">match score</div>
                       {l.url ? (
                         <a
-                          className="text-xs font-medium underline underline-offset-4 opacity-80 hover:opacity-100"
                           href={l.url}
                           target="_blank"
                           rel="noreferrer"
+                          className="rounded-xl px-2 py-1 text-right hover:bg-black/[.04] dark:hover:bg-white/10"
+                          aria-label={`Open listing: ${l.title}`}
                         >
-                          Open
+                          <div className="text-2xl font-semibold tabular-nums">{l.score}</div>
+                          <div className="text-xs text-zinc-500 dark:text-zinc-400">
+                            match score · <span className="underline underline-offset-4">Open</span>
+                          </div>
                         </a>
-                      ) : null}
+                      ) : (
+                        <>
+                          <div className="text-2xl font-semibold tabular-nums">{l.score}</div>
+                          <div className="text-xs text-zinc-500 dark:text-zinc-400">match score</div>
+                        </>
+                      )}
                     </div>
                   </div>
 
