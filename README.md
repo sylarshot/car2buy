@@ -1,4 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## car2buy
+
+Find a suitable used car to buy in **Hungary** by applying filters and sorting listings by a transparent **match score** (price + mileage + year + keyword relevance).
+
+### Features
+
+- **Hard filters**: fuel, body, transmission, year range, location substring
+- **Match scoring**: budget (with flex %), mileage cap, year range
+- **CSV import**: paste a CSV export and instantly rank your own listings
+
+### Run locally
+
+```bash
+cd car2buy
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000`.
+
+### CSV format
+
+Required columns:
+
+- `id,title,priceHuf,year,mileageKm,fuel,transmission,body`
+
+Optional columns:
+
+- `make,model,location,powerKw,displacementCcm,notes,url,createdAt`
+
+Fuel values supported:
+
+- `petrol`, `hybrid`, `plugin_hybrid`, `electric`
+
+Body values supported:
+
+- `hatchback`, `sedan`, `suv`, `coupe`, `convertible`
+
+### Deploy to Vercel
+
+- **GitHub repo**: create a new repo named `car2buy` under your account: `https://github.com/sylarshot`
+- **Push**: push this `car2buy/` folder as the repository root
+- **Vercel**: import the GitHub repo in your Vercel project space: `https://vercel.com/sylarshots-projects/`
+- **Framework preset**: Next.js (auto-detected)
+- **Build command**: `npm run build` (default)
+- **Output**: Next.js (default)
 
 ## Getting Started
 
