@@ -14,6 +14,7 @@ export type Listing = {
   title: string;
   make?: string;
   model?: string;
+  imageUrl?: string; // local (/cars/xxx.svg) or remote https://...
   priceHuf: number;
   year: number;
   mileageKm: number;

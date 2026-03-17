@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#1e293b"/>
+      <stop offset="1" stop-color="#0b1220"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#g)"/>
+  <g fill="none" stroke="#e2e8f0" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.95">
+    <path d="M130 228c18-30 42-54 74-68 46-20 124-22 186-18 54 4 92 14 128 38 26 18 42 40 48 62"/>
+    <path d="M150 240h340c18 0 34 9 44 24l22 32H84l22-32c10-15 26-24 44-24z"/>
+    <circle cx="210" cy="290" r="28"/>
+    <circle cx="430" cy="290" r="28"/>
+    <path d="M246 200h120"/>
+  </g>
+  <text x="32" y="54" fill="#e2e8f0" font-family="ui-sans-serif, system-ui" font-size="28" font-weight="700">VW Golf</text>
+  <text x="32" y="88" fill="#cbd5e1" font-family="ui-sans-serif, system-ui" font-size="16">placeholder image</text>
+</svg>

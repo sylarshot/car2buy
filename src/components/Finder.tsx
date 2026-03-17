@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import type { BodyType, Fuel, Listing, SearchCriteria, Transmission } from "@/lib/types";
 import { sampleListings } from "@/lib/sampleListings";
 import { parseListingsCsv } from "@/lib/csv";
@@ -334,7 +335,7 @@ export default function Finder() {
             <FieldLabel>CSV import</FieldLabel>
             <Hint>
               Required columns: <code className="font-mono">id,title,priceHuf,year,mileageKm,fuel,transmission,body</code>
-              . Optional: <code className="font-mono">make,model,location,powerKw,displacementCcm,notes,url,createdAt</code>
+              . Optional: <code className="font-mono">make,model,imageUrl,location,powerKw,displacementCcm,notes,url,createdAt</code>
             </Hint>
             <textarea
               className={[
@@ -342,7 +343,7 @@ export default function Finder() {
                 "focus:ring-2 focus:ring-zinc-900/10",
                 "dark:border-white/10 dark:bg-zinc-950 dark:text-zinc-100 dark:focus:ring-white/10",
               ].join(" ")}
-              placeholder={`id,title,priceHuf,year,mileageKm,fuel,transmission,body,location\n1,"Toyota Corolla 1.6",3990000,2016,128000,petrol,manual,sedan,Budapest`}
+              placeholder={`id,title,priceHuf,year,mileageKm,fuel,transmission,body,imageUrl,location\n1,"Toyota Corolla 1.6",3990000,2016,128000,petrol,manual,sedan,/cars/corolla.svg,Budapest`}
               value={csvText}
               onChange={(e) => setCsvText(e.target.value)}
             />
@@ -406,8 +407,25 @@ export default function Finder() {
                   className="rounded-2xl border border-black/10 bg-white p-4 dark:border-white/10 dark:bg-black"
                 >
                   <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0">
-                      <div className="truncate text-base font-semibold">{l.title}</div>
+                    <div className="flex min-w-0 gap-4">
+                      <div className="relative mt-0.5 hidden h-[76px] w-[124px] shrink-0 overflow-hidden rounded-xl border border-black/10 bg-zinc-100 dark:border-white/10 dark:bg-white/5 sm:block">
+                        {l.imageUrl ? (
+                          <Image
+                            src={l.imageUrl}
+                            alt={l.title}
+                            fill
+                            sizes="124px"
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-xs text-zinc-500 dark:text-zinc-400">
+                            No image
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="min-w-0">
+                        <div className="truncate text-base font-semibold">{l.title}</div>
                       <div className="mt-1 flex flex-wrap gap-2 text-xs text-zinc-600 dark:text-zinc-400">
                         <span>{formatHuf(l.priceHuf)}</span>
                         <span>•</span>
@@ -425,6 +443,7 @@ export default function Finder() {
                         <Badge>{l.fuel}</Badge>
                         <Badge>{l.transmission}</Badge>
                         <Badge>{l.body}</Badge>
+                      </div>
                       </div>
                     </div>
 

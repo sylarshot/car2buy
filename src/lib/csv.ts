@@ -137,6 +137,7 @@ export function parseListingsCsv(csvText: string): CsvParseResult {
       title,
       make: get("make") || undefined,
       model: get("model") || undefined,
+      imageUrl: get("imageUrl") || undefined,
       priceHuf,
       year,
       mileageKm,

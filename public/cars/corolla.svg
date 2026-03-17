@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#334155"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#g)"/>
+  <g fill="none" stroke="#e2e8f0" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.95">
+    <path d="M140 220c18-34 44-58 78-72 46-20 114-20 160-18 54 2 92 14 130 40 26 18 42 40 48 66"/>
+    <path d="M160 232h340c20 0 38 10 48 26l18 28H118l18-28c10-16 28-26 48-26z"/>
+    <circle cx="210" cy="286" r="28"/>
+    <circle cx="430" cy="286" r="28"/>
+    <path d="M236 200h118"/>
+  </g>
+  <text x="32" y="54" fill="#e2e8f0" font-family="ui-sans-serif, system-ui" font-size="28" font-weight="700">Toyota Corolla</text>
+  <text x="32" y="88" fill="#cbd5e1" font-family="ui-sans-serif, system-ui" font-size="16">placeholder image</text>
+</svg>

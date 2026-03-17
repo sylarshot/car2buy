@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#334155"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#g)"/>
+  <g fill="none" stroke="#f1f5f9" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.95">
+    <path d="M140 222c20-34 50-58 90-72 52-18 122-18 168-14 54 4 92 16 128 40 22 14 36 34 42 58"/>
+    <path d="M158 236h324c20 0 38 10 48 26l18 28H92l18-28c10-16 28-26 48-26z"/>
+    <circle cx="210" cy="286" r="28"/>
+    <circle cx="430" cy="286" r="28"/>
+    <path d="M265 198h110"/>
+    <path d="M520 184h40"/>
+    <path d="M540 164v40"/>
+  </g>
+  <text x="32" y="54" fill="#f1f5f9" font-family="ui-sans-serif, system-ui" font-size="28" font-weight="700">Tesla Model 3</text>
+  <text x="32" y="88" fill="#e2e8f0" font-family="ui-sans-serif, system-ui" font-size="16">placeholder image</text>
+</svg>

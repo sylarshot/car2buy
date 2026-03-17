@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0f766e"/>
+      <stop offset="1" stop-color="#064e3b"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="360" fill="url(#g)"/>
+  <g fill="none" stroke="#ecfeff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.95">
+    <path d="M135 226c18-32 44-56 78-70 50-22 126-22 182-18 56 4 94 16 130 40 26 18 42 40 48 64"/>
+    <path d="M152 238h336c18 0 34 9 44 24l22 32H86l22-32c10-15 26-24 44-24z"/>
+    <circle cx="210" cy="290" r="28"/>
+    <circle cx="430" cy="290" r="28"/>
+    <path d="M260 200h110"/>
+    <path d="M520 156c10 8 16 18 16 30 0 22-18 40-40 40-12 0-22-4-30-12"/>
+  </g>
+  <text x="32" y="54" fill="#ecfeff" font-family="ui-sans-serif, system-ui" font-size="28" font-weight="700">Toyota Prius</text>
+  <text x="32" y="88" fill="#ccfbf1" font-family="ui-sans-serif, system-ui" font-size="16">placeholder image</text>
+</svg>

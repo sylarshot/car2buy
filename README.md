@@ -26,7 +26,7 @@ Required columns:
 
 Optional columns:
 
-- `make,model,location,powerKw,displacementCcm,notes,url,createdAt`
+- `make,model,imageUrl,location,powerKw,displacementCcm,notes,url,createdAt`
 
 Fuel values supported:
 
