@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback } from "react";
 import Image from "next/image";
 import type { BodyType, Fuel, Listing, SearchCriteria, Transmission } from "@/lib/types";
 import { sampleListings } from "@/lib/sampleListings";
@@ -53,7 +53,7 @@ function toggle<T>(set: Set<T>, v: T) {
 }
 
 export default function Finder() {
-  type Source = "sample" | "csv";
+  type Source = "sample" | "csv" | "live";
   const [source, setSource] = useState<Source>("sample");
   const [csvText, setCsvText] = useState("");
   const [csvError, setCsvError] = useState<string | null>(null);
@@ -66,6 +66,12 @@ export default function Finder() {
     { url: string; ok: boolean; error?: string }[]
   >([]);
   const [liveListings, setLiveListings] = useState<Listing[] | null>(null);
+
+  // Real-time dealer search
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
+  const [searchListings, setSearchListings] = useState<Listing[] | null>(null);
+  const [searchResults, setSearchResults] = useState<{ site: string; ok: boolean; count: number; error?: string }[]>([]);
 
   const [query, setQuery] = useState("");
   const [budgetHuf, setBudgetHuf] = useState("4500000");
@@ -82,9 +88,10 @@ export default function Finder() {
   const listings = useMemo<Listing[]>(
     () => {
       if (source === "sample") return sampleListings;
+      if (source === "live") return searchListings ?? liveListings ?? [];
       return csvListings ?? liveListings ?? [];
     },
-    [source, csvListings, liveListings]
+    [source, csvListings, liveListings, searchListings]
   );
 
   const criteria: SearchCriteria = useMemo(
@@ -129,6 +136,31 @@ export default function Finder() {
     setCsvWarnings(res.warnings);
     setSource("csv");
   }
+
+  const onSearchHasznaltauto = useCallback(async () => {
+    setSearchError(null);
+    setSearchLoading(true);
+    setSearchResults([]);
+    try {
+      const res = await fetch("/api/search", { method: "POST" });
+      const json = (await res.json()) as {
+        listings?: Listing[];
+        results?: { site: string; ok: boolean; count: number; error?: string }[];
+        error?: string;
+      };
+      if (!res.ok || json.error) {
+        setSearchError(json.error ?? "Search failed.");
+        return;
+      }
+      setSearchListings(json.listings ?? []);
+      setSearchResults(json.results ?? []);
+      setSource("live");
+    } catch (e) {
+      setSearchError(e instanceof Error ? e.message : "Search failed.");
+    } finally {
+      setSearchLoading(false);
+    }
+  }, []);
 
   async function onFetchLive() {
     setLiveError(null);
@@ -181,6 +213,10 @@ export default function Finder() {
     setFuels(new Set());
     setTransmissions(new Set());
     setBodies(new Set());
+    setSearchListings(null);
+    setSearchError(null);
+    setSearchResults([]);
+    setSource("sample");
   }
 
   return (
@@ -195,11 +231,36 @@ export default function Finder() {
               </div>
             </div>
             <div className="flex gap-2">
+              <Button
+                onClick={onSearchHasznaltauto}
+                disabled={searchLoading}
+              >
+                {searchLoading ? "Searching…" : "Search Használtautó"}
+              </Button>
               <Button variant="secondary" onClick={onReset}>
                 Reset
               </Button>
             </div>
           </div>
+          {searchError ? (
+            <div className="mt-3 rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-300">
+              {searchError}
+            </div>
+          ) : null}
+          {searchListings && !searchError ? (
+            <div className="mt-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs text-emerald-800 dark:text-emerald-200">
+              <span className="font-medium">{searchListings.length} listings</span> fetched live from dealers.
+              {searchResults.length ? (
+                <ul className="mt-1 list-disc pl-4">
+                  {searchResults.map((r) => (
+                    <li key={r.site}>
+                      {r.site}: {r.ok ? `${r.count} cars` : `failed — ${r.error}`}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className="mt-5 grid gap-4">
             <div className="grid gap-2">
@@ -372,12 +433,13 @@ export default function Finder() {
               value={source}
               onChange={(e) => {
                 const v = e.target.value;
-                if (v === "sample" || v === "csv") setSource(v);
+                if (v === "sample" || v === "csv" || v === "live") setSource(v);
               }}
               className="max-w-[160px]"
             >
               <option value="sample">Sample</option>
               <option value="csv">CSV</option>
+              <option value="live">Használtautó</option>
             </Select>
           </div>
 
@@ -470,7 +532,9 @@ export default function Finder() {
                 Clear
               </Button>
               <div className="text-xs text-zinc-500 dark:text-zinc-400">
-                Active rows: <span className="font-medium">{source === "sample" ? sampleListings.length : (csvListings?.length ?? 0)}</span>
+                Active rows: <span className="font-medium">
+                  {source === "sample" ? sampleListings.length : source === "live" ? (searchListings?.length ?? 0) : (csvListings?.length ?? 0)}
+                </span>
               </div>
             </div>
             {csvError ? (
@@ -635,9 +699,10 @@ export default function Finder() {
         <Card className="h-fit">
           <div className="text-lg font-semibold">What to improve next</div>
           <ul className="mt-2 list-disc pl-5 text-sm text-zinc-600 dark:text-zinc-400">
-            <li>Add real scraping/integration (Használtautó, Jófogás) via backend jobs.</li>
+            <li>Add Jófogás and dealer site integrations for broader coverage.</li>
             <li>VIN check hooks, service history scoring, and risk flags (fleet/taxi).</li>
             <li>Distance-to-seller scoring and map view.</li>
+            <li>Auto-refresh results every N minutes when filters change.</li>
           </ul>
         </Card>
       </div>

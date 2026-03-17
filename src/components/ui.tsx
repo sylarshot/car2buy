@@ -22,12 +22,7 @@ export function FieldLabel({
   className = "",
 }: PropsWithChildren<{ className?: string }>) {
   return (
-    <div
-      className={[
-        "text-sm font-medium text-zinc-900 dark:text-zinc-100",
-        className,
-      ].join(" ")}
-    >
+    <div className={["text-sm font-medium text-zinc-900 dark:text-zinc-100", className].join(" ")}>
       {children}
     </div>
   );
@@ -68,9 +63,7 @@ export function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
 }
 
 export function Button(
-  props: React.ButtonHTMLAttributes<HTMLButtonElement> & {
-    variant?: "primary" | "secondary" | "ghost";
-  }
+  props: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "secondary" | "ghost" }
 ) {
   const { className = "", variant = "primary", ...rest } = props;
   const base =

@@ -1,13 +1,12 @@
 import type { Listing } from "@/lib/types";
 
+// Sample listings — shown on first load. Hit "Search Használtautó" for live data.
 export const sampleListings: Listing[] = [
   {
     id: "1",
     title: "Toyota Corolla 1.6 (2016) - Budapest",
     make: "Toyota",
     model: "Corolla",
-    imageUrl:
-      "https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=900&q=60",
     priceHuf: 3990000,
     year: 2016,
     mileageKm: 128000,
@@ -19,14 +18,14 @@ export const sampleListings: Listing[] = [
     displacementCcm: 1598,
     notes: "Service history, 2nd owner, city+highway use.",
     url: "https://www.hasznaltauto.hu/",
+    imageUrl:
+      "https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=900&q=60",
   },
   {
     id: "2",
     title: "Honda Civic 1.8 (2014) - Pest county",
     make: "Honda",
     model: "Civic",
-    imageUrl:
-      "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=60",
     priceHuf: 3290000,
     year: 2014,
     mileageKm: 154000,
@@ -38,14 +37,14 @@ export const sampleListings: Listing[] = [
     displacementCcm: 1798,
     notes: "Fresh TÜV, minor cosmetics.",
     url: "https://www.dasweltauto.hu",
+    imageUrl:
+      "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=60",
   },
   {
     id: "3",
     title: "Toyota Prius Hybrid (2015) - Győr",
     make: "Toyota",
     model: "Prius",
-    imageUrl:
-      "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=900&q=60",
     priceHuf: 4650000,
     year: 2015,
     mileageKm: 210000,
@@ -55,14 +54,14 @@ export const sampleListings: Listing[] = [
     location: "Győr-Moson-Sopron",
     notes: "Hybrid battery checked, taxi history unknown.",
     url: "https://toyotakovacs.hu/auto-allapot/hasznaltauto/",
+    imageUrl:
+      "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=900&q=60",
   },
   {
     id: "4",
     title: "VW Golf 1.4 TSI (2017) - Szeged",
     make: "Volkswagen",
     model: "Golf",
-    imageUrl:
-      "https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=900&q=60",
     priceHuf: 4390000,
     year: 2017,
     mileageKm: 142000,
@@ -72,14 +71,14 @@ export const sampleListings: Listing[] = [
     location: "Csongrád-Csanád",
     notes: "DSG service documented.",
     url: "https://dunaauto.hu",
+    imageUrl:
+      "https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=900&q=60",
   },
   {
     id: "5",
     title: "Tesla Model 3 (2019) - Budapest",
     make: "Tesla",
     model: "Model 3",
-    imageUrl:
-      "https://images.unsplash.com/photo-1541443131876-44b03de101c5?auto=format&fit=crop&w=900&q=60",
     priceHuf: 11990000,
     year: 2019,
     mileageKm: 98000,
@@ -89,14 +88,14 @@ export const sampleListings: Listing[] = [
     location: "Budapest",
     notes: "Imported, fast charging enabled.",
     url: "https://emilfreyselect.hu/kiemelt-hasznaltauto-kinalatunk",
+    imageUrl:
+      "https://images.unsplash.com/photo-1541443131876-44b03de101c5?auto=format&fit=crop&w=900&q=60",
   },
   {
     id: "6",
     title: "Toyota RAV4 Hybrid (2018) - Debrecen",
     make: "Toyota",
     model: "RAV4",
-    imageUrl:
-      "https://images.unsplash.com/photo-1511910849309-0dffb8781d1b?auto=format&fit=crop&w=900&q=60",
     priceHuf: 9990000,
     year: 2018,
     mileageKm: 175000,
@@ -106,6 +105,9 @@ export const sampleListings: Listing[] = [
     location: "Hajdú-Bihar",
     notes: "Family car, highway mileage.",
     url: "https://www.peugeotfabian.hu/budapest/hasznaltauto/?caru-smPage=1",
+    imageUrl:
+      "https://images.unsplash.com/photo-1511910849309-0dffb8781d1b?auto=format&fit=crop&w=900&q=60",
   },
 ];
+
 

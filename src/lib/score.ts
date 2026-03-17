@@ -26,6 +26,7 @@ function scorePrice(listingPrice: number, budget?: number, flexPct = 10) {
 function scoreMileage(mileageKm: number, maxKm?: number) {
   if (!maxKm || maxKm <= 0) return { score: 0.6, reason: "No mileage cap" };
   if (mileageKm <= maxKm) return { score: 1.0, reason: "Mileage OK" };
+  // degrade to 0 at +50% over max
   const softMax = maxKm * 1.5;
   if (mileageKm >= softMax) return { score: 0.0, reason: "High mileage" };
   const over = (mileageKm - maxKm) / (softMax - maxKm);
@@ -55,6 +56,7 @@ export function scoreAndFilterListings(
   const results: ScoredListing[] = [];
 
   for (const l of listings) {
+    // hard filters
     if (fuels.size && !fuels.has(l.fuel)) continue;
     if (transmissions.size && !transmissions.has(l.transmission)) continue;
     if (bodies.size && !bodies.has(l.body)) continue;
@@ -67,7 +69,9 @@ export function scoreAndFilterListings(
     }
 
     if (queryTokens.length) {
-      const blob = `${l.title} ${l.make ?? ""} ${l.model ?? ""} ${l.notes ?? ""}`;
+      const blob = `${l.title} ${l.make ?? ""} ${l.model ?? ""} ${
+        l.notes ?? ""
+      }`;
       if (!containsAny(blob, queryTokens)) continue;
     }
 
@@ -82,6 +86,7 @@ export function scoreAndFilterListings(
     const yr = scoreYear(l.year, c.yearMin, c.yearMax);
     reasons.push(yr.reason);
 
+    // query relevance boosts (soft)
     let rel = 0.6;
     if (queryTokens.length) {
       const blob = normString(
@@ -94,6 +99,7 @@ export function scoreAndFilterListings(
       reasons.push("No keywords");
     }
 
+    // weighted score
     const score01 =
       0.45 * price.score + 0.25 * mile.score + 0.2 * yr.score + 0.1 * rel;
 

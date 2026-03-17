@@ -5,6 +5,7 @@ type CsvParseResult =
   | { ok: false; error: string };
 
 function splitCsvLine(line: string) {
+  // Minimal CSV: handles commas and quotes ("") for escaping.
   const out: string[] = [];
   let cur = "";
   let inQuotes = false;
@@ -81,16 +82,7 @@ export function parseListingsCsv(csvText: string): CsvParseResult {
   const header = splitCsvLine(lines[0]).map(norm);
   const idx = (name: string) => header.indexOf(norm(name));
 
-  const required = [
-    "id",
-    "title",
-    "priceHuf",
-    "year",
-    "mileageKm",
-    "fuel",
-    "transmission",
-    "body",
-  ];
+  const required = ["id", "title", "priceHuf", "year", "mileageKm", "fuel", "transmission", "body"];
   for (const r of required) {
     if (idx(r) === -1) {
       return {
@@ -118,16 +110,7 @@ export function parseListingsCsv(csvText: string): CsvParseResult {
     const transmission = parseTransmission(get("transmission"));
     const body = parseBody(get("body"));
 
-    if (
-      !id ||
-      !title ||
-      priceHuf == null ||
-      year == null ||
-      mileageKm == null ||
-      !fuel ||
-      !transmission ||
-      !body
-    ) {
+    if (!id || !title || priceHuf == null || year == null || mileageKm == null || !fuel || !transmission || !body) {
       warnings.push(`Row ${row + 1}: skipped (missing/invalid required fields).`);
       continue;
     }
@@ -137,7 +120,6 @@ export function parseListingsCsv(csvText: string): CsvParseResult {
       title,
       make: get("make") || undefined,
       model: get("model") || undefined,
-      imageUrl: get("imageUrl") || undefined,
       priceHuf,
       year,
       mileageKm,

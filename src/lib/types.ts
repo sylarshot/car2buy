@@ -14,36 +14,36 @@ export type Listing = {
   title: string;
   make?: string;
   model?: string;
-  imageUrl?: string; // local (/cars/xxx.svg) or remote https://...
   priceHuf: number;
   year: number;
   mileageKm: number;
   fuel: Fuel;
   transmission: Transmission;
   body: BodyType;
-  location?: string;
+  location?: string; // e.g. "Budapest" / "Pest" / "Győr-Moson-Sopron"
   powerKw?: number;
   displacementCcm?: number;
   notes?: string;
   url?: string;
-  createdAt?: string;
+  imageUrl?: string; // local (/cars/xxx.svg) or remote https://...
+  createdAt?: string; // ISO, optional
 };
 
 export type SearchCriteria = {
-  query?: string;
+  query?: string; // free text (make/model/keywords)
   budgetHuf?: number;
-  budgetFlexPct?: number;
+  budgetFlexPct?: number; // how much above budget is acceptable (soft)
   yearMin?: number;
   yearMax?: number;
   mileageMaxKm?: number;
   fuels?: Fuel[];
   transmissions?: Transmission[];
   bodies?: BodyType[];
-  locations?: string[];
+  locations?: string[]; // string contains match
 };
 
 export type ScoredListing = Listing & {
-  score: number;
-  reasons: string[];
+  score: number; // 0..100
+  reasons: string[]; // short explanations
 };
 
