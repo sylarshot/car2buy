@@ -52,7 +52,8 @@ function toggle<T>(set: Set<T>, v: T) {
 }
 
 export default function Finder() {
-  const [source, setSource] = useState<"sample" | "csv">("sample");
+  type Source = "sample" | "csv";
+  const [source, setSource] = useState<Source>("sample");
   const [csvText, setCsvText] = useState("");
   const [csvError, setCsvError] = useState<string | null>(null);
   const [csvWarnings, setCsvWarnings] = useState<string[]>([]);
@@ -70,7 +71,10 @@ export default function Finder() {
   const [transmissions, setTransmissions] = useState<Set<Transmission>>(new Set());
   const [bodies, setBodies] = useState<Set<BodyType>>(new Set());
 
-  const listings = source === "sample" ? sampleListings : csvListings ?? [];
+  const listings = useMemo<Listing[]>(
+    () => (source === "sample" ? sampleListings : csvListings ?? []),
+    [source, csvListings]
+  );
 
   const criteria: SearchCriteria = useMemo(
     () => ({
@@ -275,7 +279,14 @@ export default function Finder() {
                 Use sample listings now; import CSV later.
               </div>
             </div>
-            <Select value={source} onChange={(e) => setSource(e.target.value as any)} className="max-w-[160px]">
+            <Select
+              value={source}
+              onChange={(e) => {
+                const v = e.target.value;
+                if (v === "sample" || v === "csv") setSource(v);
+              }}
+              className="max-w-[160px]"
+            >
               <option value="sample">Sample</option>
               <option value="csv">CSV</option>
             </Select>
